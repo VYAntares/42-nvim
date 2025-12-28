@@ -29,16 +29,25 @@ if not pcall(require, "lazy") then
 	vim.cmd.quit()
 end
 
+-- Launch! :)
+if (vim.g.user42 == nil) then
+	vim.g.user42 = vim.env.USER
+end
+
 -- Load Lazy and make sure every plugin is installed.
 require "plugins"
 
 -- Load config/init.lua which will load every plugin configuration.
 require "config"
 
--- Launch! :)
-if (vim.g.user42 == nil) then
-	vim.g.user42 = vim.env.USER
-end
+-- Désactiver les diagnostics virtuels (commentaires inline)
+vim.diagnostic.config({
+	virtual_text = false,  -- ← Enlève les commentaires rouges
+	signs = true,          -- ← Garde les icônes E/W sur la ligne
+	underline = true,      -- ← Garde le soulignement des erreurs
+	update_in_insert = false,
+	severity_sort = true,
+})
 
 vim.notify = require("notify")
 

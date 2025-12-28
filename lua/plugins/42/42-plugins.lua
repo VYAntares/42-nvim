@@ -9,9 +9,6 @@ return {
 	-- WITHOUT the Lausanne watermark.
 
 	{
-		'fclivaz42/42header-ls',
 	--	branch = 'stdheader-fixes' --Uncomment this if you are not from Lausanne!
 	},
-	-- "42Paris/42header",
-	"hardyrafael17/norminette42.nvim"
 }

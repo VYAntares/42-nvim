@@ -5,9 +5,6 @@ local config = ... .. "."
 -- Load Telescope Settings.
 require(config .. "_telescope")
 
--- Load Treesitter Settings.
-require(config .. "_treesitter")
-
 -- Load LSP Settings.
 require(config .. "_lsp")
 

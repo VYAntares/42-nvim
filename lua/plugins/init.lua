@@ -21,7 +21,6 @@ require('lazy').setup({
 	-- Then load every 42 plugin...
 	-- NOTE: If you are not from 42 or don't know what it is,
 	-- you can delete this next line and the 42 folder!
-	{	import = 'plugins.42'	},
 
 	-- Then load every plugin that came bundled...
 	{	import = 'plugins.builtin'	},
