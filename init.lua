@@ -1,5 +1,14 @@
 --[[ 42-Nvim config file ]] --
 --
+--
+-- Désactive uniquement Tree-sitter, pas la coloration syntaxique
+vim.g.loaded_nvim_treesitter = 1
+
+-- Bloquer Tree-sitter de démarrer
+if vim.treesitter and vim.treesitter.start then
+    vim.treesitter.start = function() end
+end
+
 -- 42-Nvim is a neovim configuration, supercharged for 42 Students.
 ---@diagnostic disable: missing-fields
 -- Set Vim settings. Necessary before lazy is run.

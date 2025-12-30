@@ -36,28 +36,49 @@ end
 
 -- Smart Open Handler, opens binaries externally
 local function smarthandler(args)
-	local mimetype = vim.fn.system("file --mime-encoding -Lb '" .. args.path .. "'")
-	if not (mimetype == "binary\n" and vim.fn.system("file -Lb '" .. args.path .. "'") ~= "empty\n") then
-		return { handled = false }
-	end
-
-	local openfunc
-	local os = vim.fn.system("uname -s")
-
-	if os == "Linux\n" then
-		openfunc = "xdg-open"
-	elseif os == "Darwin\n" then
-		openfunc = "open"
-	end
-	vim.loop.spawn(openfunc, { args = { args.path } },
-	function(code, _)
-		if code ~= 0 then
-			vim.notify("Error opening " .. args.path)
-		else
-			vim.notify("Externally opened " .. args.path)
-		end
-	end)
-	return { handled = true }
+    -- Liste des extensions à toujours ouvrir dans Neovim
+    local text_extensions = {
+        "lua", "vim", "txt", "md", "json", "yaml", "yml", "toml",
+        "c", "cpp", "h", "hpp", "py", "js", "ts", "html", "css",
+        "sh", "bash", "zsh", "conf", "cfg", "ini", "make"
+    }
+    
+    -- Vérifier l'extension du fichier
+    local ext = args.path:match("^.+%.(.+)$")
+    for _, allowed_ext in ipairs(text_extensions) do
+        if ext == allowed_ext then
+            return { handled = false }
+        end
+    end
+    
+    -- Vérifier si c'est un Makefile
+    if args.path:match("Makefile$") or args.path:match("makefile$") then
+        return { handled = false }
+    end
+    
+    -- Vérifier le mimetype uniquement pour les autres fichiers
+    local mimetype = vim.fn.system("file --mime-encoding -Lb '" .. args.path .. "'")
+    if not (mimetype == "binary\n" and vim.fn.system("file -Lb '" .. args.path .. "'") ~= "empty\n") then
+        return { handled = false }
+    end
+    
+    local openfunc
+    local os = vim.fn.system("uname -s")
+    if os == "Linux\n" then
+        openfunc = "xdg-open"
+    elseif os == "Darwin\n" then
+        openfunc = "open"
+    end
+    
+    vim.loop.spawn(openfunc, { args = { args.path } },
+    function(code, _)
+        if code ~= 0 then
+            vim.notify("Error opening " .. args.path)
+        else
+            vim.notify("Externally opened " .. args.path)
+        end
+    end)
+    return { handled = true }
 end
 
 require("neo-tree").setup({
